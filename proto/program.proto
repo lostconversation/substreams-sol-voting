@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package substreams.v1.program;
+
+// Main data message that holds lists of various program-related data
+message Data {
+    repeated AddCandidate add_candidate_list = 1;
+    repeated InitPoll init_poll_list = 2;
+    repeated Vote vote_list = 3;
+}
+
+// Message for initializing a poll
+message InitPoll {
+    uint64 poll_id = 1;
+    string description = 2;
+    bytes authority = 3;
+}
+
+// Message for adding a candidate
+message AddCandidate {
+    bytes poll_address = 1;
+    string candidate_name = 2;
+    uint64 initial_votes = 3;
+    bytes candidate_address = 4;
+}
+
+// Message for voting
+message Vote {
+    bytes candidate_address = 1;
+    bytes voter = 2;
+    uint64 new_vote_count = 3;
+}
