@@ -20,6 +20,8 @@ pub struct InitPoll {
     pub description: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="3")]
     pub authority: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="4")]
+    pub account: ::prost::alloc::vec::Vec<u8>,
 }
 /// Message for adding a candidate
 #[allow(clippy::derive_partial_eq_without_eq)]

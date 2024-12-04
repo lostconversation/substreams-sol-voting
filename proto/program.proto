@@ -14,6 +14,7 @@ message InitPoll {
     uint64 poll_id = 1;
     string description = 2;
     bytes authority = 3;
+    bytes account = 4;
 }
 
 // Message for adding a candidate

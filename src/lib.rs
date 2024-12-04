@@ -35,6 +35,7 @@ fn map_program_data(blk: Block) -> Data {
                             poll_id: instruction.poll_id,
                             description: instruction.description,
                             authority: inst.accounts()[1].0.to_vec(), // Using .0 to access the inner bytes
+                            account: inst.accounts()[2].0.to_vec(), // Using .0 to access the inner bytes
                         });
                     }
                 }
@@ -44,14 +45,14 @@ fn map_program_data(blk: Block) -> Data {
                     let poll_account = &inst.accounts()[1];
                     let candidate_account = &inst.accounts()[0];
                     
-                    if let Some(post_balance) = meta.post_token_balances.get(0) {
-                        add_candidate_list.push(AddCandidate {
-                            poll_address: poll_account.0.to_vec(),
-                            candidate_address: candidate_account.0.to_vec(),
-                            candidate_name: format!("CAND"), // Placeholder for now
-                            initial_votes: 0, // Placeholder for now
-                        });
-                    }
+                    
+                    add_candidate_list.push(AddCandidate {
+                        poll_address: poll_account.0.to_vec(),
+                        candidate_address: candidate_account.0.to_vec(),
+                        candidate_name: format!("CAND"), // Placeholder for now
+                        initial_votes: 0, // Placeholder for now
+                    });
+                    
                 }
                 
                 // Handle Vote instruction
@@ -59,13 +60,13 @@ fn map_program_data(blk: Block) -> Data {
                     let candidate_account = &inst.accounts()[0];
                     let voter_account = &inst.accounts()[1];
                     
-                    if let Some(post_balance) = meta.post_token_balances.get(0) {
-                        vote_list.push(Vote {
-                            candidate_address: candidate_account.0.to_vec(),
-                            voter: voter_account.0.to_vec(),
-                            new_vote_count: 0, // Placeholder for now
-                        });
-                    }
+                    
+                    vote_list.push(Vote {
+                        candidate_address: candidate_account.0.to_vec(),
+                        voter: voter_account.0.to_vec(),
+                        new_vote_count: 0, // Placeholder for now
+                    });
+                    
                 }
             });
     });
@@ -78,6 +79,13 @@ fn map_program_data(blk: Block) -> Data {
 }
 
 
+#[substreams::handlers::map]
+fn all_transactions_without_votes(blk: Block) -> Result<Transactions, substreams::errors::Error> {
+    let transactions: Vec<ConfirmedTransaction> = blk.transactions.into_iter().collect();
 
+    substreams::log::println(format!("Number of transactions:{}", transactions.len()));
+
+    Ok(Transactions { transactions })
+}
 
 
